@@ -486,7 +486,7 @@
                 ...visits.map(v => v.participantID)
             ].filter(pid => pid && pid !== ""));
 
-            // 2. 收集問卷中所有出現過的題號 (q01_sensory_experience, q02_fresh...)
+            // 2. 自動收集問卷的所有問題 key (q01_sensory_experience, q02_fresh...)
             const allSurveyKeys = new Set();
             surveys.forEach(s => {
                 if (s.responses) {
@@ -497,20 +497,20 @@
 
             const masterDataMap = {};
 
-            // 3. 初始化每個 PID 的資料結構 (確保包含 Survey 欄位)
+            // 3. 初始化主表格欄位結構
             allPIDs.forEach(pid => {
                 masterDataMap[pid] = {
                     "Participant ID": pid,
                     "Survey Submitted Time": "",
-                    "AI Nudge Text": "",
+                    "AI Nudge Text": ""
                 };
 
-                // 預先寫入問卷題目的欄位標題，預設為空字串
+                // 合併問卷回答到 Master Summary 表格中
                 sortedSurveyKeys.forEach(qKey => {
                     masterDataMap[pid][`Survey_${qKey}`] = "";
                 });
 
-                // 寫入商店瀏覽與結帳的相關欄位
+                // 合併網站瀏覽與結帳數據
                 Object.assign(masterDataMap[pid], {
                     "Enter Time": "",
                     "Leave Time": "",
@@ -524,14 +524,14 @@
                     "Abandon Cart Total ($)": 0
                 });
 
-                // 物品購買量與選購順序
+                // 1~19 號商品的購買量與選擇順序
                 for (let i = 1; i <= 19; i++) {
                     masterDataMap[pid][`Item_${i}_Qty`] = 0;
                     masterDataMap[pid][`Seq_Item_${i}`] = "";
                 }
             });
 
-            // 4. 填入 Survey 數據
+            // 4. 填入問卷資料
             surveys.forEach(s => {
                 const pid = s.participantID;
                 if (masterDataMap[pid]) {
@@ -545,7 +545,7 @@
                 }
             });
 
-            // 5. 填入 Visit Logs 數據
+            // 5. 填入瀏覽日誌
             visits.forEach(v => {
                 const pid = v.participantID;
                 if (masterDataMap[pid]) {
@@ -555,7 +555,7 @@
                 }
             });
 
-            // 6. 填入 Checkout Records 數據
+            // 6. 填入結帳訂單數據
             orders.forEach(o => {
                 const pid = o.participantID;
                 if (masterDataMap[pid]) {
@@ -595,7 +595,7 @@
                 }
             });
 
-            // 7. 填入 Abandoned Carts 數據
+            // 7. 填入棄單數據
             abandons.forEach(a => {
                 const pid = a.participantID;
                 if (masterDataMap[pid]) {
@@ -604,32 +604,15 @@
                 }
             });
 
-            // 8. 製作工作表 (Worksheets)
+            // 8. 建立 Excel 檔
             const wb = XLSX.utils.book_new();
 
-            // 頁籤 1: Master Merged Summary (包含完整問卷 + 商店行為)
+            // Sheet 1: Master Merged Summary (包含完整問卷 + 行為數據)
             const masterRows = Object.values(masterDataMap);
             const wsMaster = XLSX.utils.json_to_sheet(masterRows);
             XLSX.utils.book_append_sheet(wb, wsMaster, "Master Merged Summary");
 
-            // 頁籤 2: 獨立的 Survey Raw Responses (專門收錄問卷原始回覆)
-            const rawSurveyRows = surveys.map(s => {
-                const row = {
-                    "Participant ID": s.participantID || "",
-                    "Submitted Time": s.submittedAt || "",
-                    "AI Nudge Text": s.aiNudgeText || ""
-                };
-                if (s.responses) {
-                    sortedSurveyKeys.forEach(qKey => {
-                        row[qKey] = s.responses[qKey] !== undefined ? s.responses[qKey] : "";
-                    });
-                }
-                return row;
-            });
-            const wsSurveyRaw = XLSX.utils.json_to_sheet(rawSurveyRows);
-            XLSX.utils.book_append_sheet(wb, wsSurveyRaw, "Survey Responses Raw");
-
-            // 頁籤 3: Selection Sequence (商品選購順序)
+            // Sheet 2: Selection Sequence (商品選擇的詳細時間序列)
             const sequenceRows = [];
             orders.forEach(o => {
                 const pid = o.participantID;
@@ -649,7 +632,7 @@
             const wsSequence = XLSX.utils.json_to_sheet(sequenceRows);
             XLSX.utils.book_append_sheet(wb, wsSequence, "Selection Sequence");
 
-            // 9. 導出 Excel
+            // 9. 匯出 Excel 檔案
             const dateStr = new Date().toISOString().split('T')[0];
             XLSX.writeFile(wb, `FreshMart_Research_MasterData_${dateStr}.xlsx`);
 
