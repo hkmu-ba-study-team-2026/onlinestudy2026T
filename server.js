@@ -18,11 +18,9 @@ app.use(express.static(path.join(__dirname)));
 
 // 匯入你剛改好的 API 邏輯
 const adminLoginHandler = require('./api/admin-login');
-const recommendHandler = require('./api/recommend');
 
 // 路由設定 (對應原本 Vercel 的 API 路徑)
 app.use('/api/admin-login', (req, res) => adminLoginHandler(req, res));
-app.use('/api/recommend', (req, res) => recommendHandler(req, res));
 
 app.listen(PORT, () => {
     console.log(`=================================`);
