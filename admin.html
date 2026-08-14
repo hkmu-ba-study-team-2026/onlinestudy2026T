@@ -568,7 +568,6 @@
                 surveys.forEach(s => {
                     const pid = s.participantID;
                     if (masterDataMap[pid]) {
-                        masterDataMap[pid]["AI Nudge Text"] = s.aiNudgeText || "";
                         masterDataMap[pid]["Survey Submitted Time"] = s.submittedAt || "";
                         if (s.responses) {
                             Object.keys(s.responses).forEach(qKey => {
