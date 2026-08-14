@@ -403,8 +403,6 @@
     </div>
 
     <script>
-        const API_URL = "/api/recommend";
-
         const questionIds = [
             "q01_sensory_experience",
             "q02_fresh",
@@ -450,17 +448,6 @@
             });
         }
 
-        const productsList = ["Red Fuji Apple", "Whole Milk", "Whole Wheat Bread", "Chicken Legs", "Avocado"];
-
-        function generateRandomParticipantID() {
-            let result = '';
-            result += Math.floor(Math.random() * 9) + 1;
-            for (let i = 0; i < 15; i++) {
-                result += Math.floor(Math.random() * 10);
-            }
-            return result;
-        }
-
         async function handleSubmit(event) {
             event.preventDefault();
 
@@ -490,46 +477,14 @@
                 surveyResponses: surveyResponses,
             };
 
-            const payload = {
-                products: productsList,
-                preferences: userPreferences
-            };
-
-            let aiNudgeText = "";
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    const recommendations = await response.json();
-                    console.log('Recommendations Result:', recommendations);
-
-                    if (typeof recommendations === 'string') {
-                        aiNudgeText = recommendations;
-                    } else if (recommendations && recommendations.recommendation) {
-                        aiNudgeText = recommendations.recommendation;
-                    }
-
-                    localStorage.setItem('recommendations', JSON.stringify(recommendations));
-                    localStorage.setItem('ai_nudge_text', aiNudgeText);
-                    localStorage.setItem('user_preferences', JSON.stringify(userPreferences));
-                } else {
-                    throw new Error(`API response error: ${response.status}`);
-                }
-            } catch (error) {
-                console.error('API Request Failed:', error);
-                aiNudgeText = 'Results generated based on your preference.';
-                localStorage.setItem('ai_nudge_text', aiNudgeText);
-            }
+            const fixedNoticeText = "Welcome to FreshMart! Please select the items you would like to purchase for your 3-day meal plan.";
+            localStorage.setItem('ai_nudge_text', fixedNoticeText);
+            localStorage.setItem('user_preferences', JSON.stringify(userPreferences));
 
             const firebaseData = {
                 participantID: participantNum,
                 submittedAt: new Date().toLocaleString(),
-                aiNudgeText: aiNudgeText,
+                aiNudgeText: fixedNoticeText,
                 responses: surveyResponses
             };
 

@@ -5,6 +5,9 @@ const pageStartTime = Date.now();
 // 設定 Checkout 完成後按下 OK 跳轉的目標網址
 const NEXT_PAGE_URL = "https://next-page-url.com";
 
+// 固定顯示的提示句子
+const FIXED_NOTICE_TEXT = "Welcome to FreshMart! Please select the items you would like to purchase for your 3-day meal plan.";
+
 // 2. 用於追蹤「加入購物車次序」的陣列
 let selectionSequence = [];
 
@@ -320,7 +323,7 @@ document.getElementById('checkout-btn')?.addEventListener('click', async functio
     const checkoutFirebaseData = {
         participantID: currentPID || getPID(),
         checkoutTime: new Date().toLocaleString(),
-        aiNudgeText: localStorage.getItem('ai_nudge_text') || "",
+        aiNudgeText: FIXED_NOTICE_TEXT, // 記錄固定的提示文字
         durationSeconds: durationInSeconds,
         formattedDuration: formattedDuration,
         finalCartItems: itemsArr,
@@ -347,7 +350,7 @@ document.getElementById('checkout-btn')?.addEventListener('click', async functio
     checkoutBtn.disabled = false;
     checkoutBtn.innerText = "Checkout";
 
-    // 顯示 Checkout 完成的 Dialog Modal（取代原先的 alert）
+    // 顯示 Checkout 完成的 Dialog Modal
     const completionModal = document.getElementById("checkoutCompletionModal");
     if (completionModal) {
         completionModal.style.display = "flex";

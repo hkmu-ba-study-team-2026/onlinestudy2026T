@@ -4,7 +4,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-  // 使用相同的 Firebase Config
   const firebaseConfig = {
     apiKey: "AIzaSyAcb21P40OEvHgc4S9ZSrV7nPFaLvwOcTU",
     authDomain: "online-study-2026.firebaseapp.com",
@@ -119,40 +118,6 @@
             margin: 0;
         }
 
-        .recommended-card {
-            border: 3px solid #16a34a !important;
-            box-shadow: 0 6px 18px rgba(22, 163, 74, 0.25) !important;
-            transform: translateY(-2px);
-        }
-        .rec-badge {
-            position: absolute;
-            top: -10px;
-            right: 10px;
-            background: #16a34a;
-            color: #ffffff;
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            z-index: 2;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-        .nudge-box {
-            background: #fef9c3;
-            border: 1.5px solid #fde047;
-            border-left: 5px solid #eab308;
-            padding: 10px 12px;
-            margin: 10px 0;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #713f12;
-            line-height: 1.5;
-            text-align: left;
-            box-shadow: 0 2px 5px rgba(234, 179, 8, 0.15);
-        }
-
         .no-results-msg {
             grid-column: 1 / -1;
             text-align: center;
@@ -240,8 +205,10 @@
         </div>
 
         <div class="rec-banner" id="featuredBanner">
-
-            <div id="bannerTextContainer" class="rec-banner-content"></div>
+            <!-- 替換為固定的提示句子 -->
+            <div id="bannerTextContainer" class="rec-banner-content">
+                <p>Welcome to FreshMart! Please select the items you would like to purchase for your 3-day meal plan.</p>
+            </div>
             <div class="products-grid" id="productWrap">
                 <div class="product-card" data-id="1" data-type="featured">
                     <div class="product-image"><img src="apple.png" alt="Apple"></div>
@@ -562,50 +529,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     updateRemainingBudgetDisplay();
-
-    const rawRecData = localStorage.getItem('recommendations');
-
-    if (rawRecData) {
-        try {
-            const data = JSON.parse(rawRecData);
-
-            let textSentence = null;
-            if (typeof data === 'string') {
-                textSentence = data;
-            } else if (data && data.recommendation) {
-                textSentence = data.recommendation;
-            }
-
-            if (textSentence) {
-                const bannerTextContainer = document.getElementById('bannerTextContainer');
-                bannerTextContainer.innerHTML = `<p>${textSentence}</p>`;
-            }
-
-            if (Array.isArray(data)) {
-                data.forEach(rec => {
-                    const card = document.querySelector(`.product-card[data-id="${rec.item_id}"]`);
-                    if (card) {
-                        card.classList.add('recommended-card');
-
-                        const recBadge = document.createElement('span');
-                        recBadge.className = 'rec-badge';
-                        recBadge.innerText = `★ Recommended #${rec.rank}`;
-                        card.appendChild(recBadge);
-
-                        const productInfo = card.querySelector('.product-info');
-                        const nudgeBox = document.createElement('div');
-                        nudgeBox.className = 'nudge-box';
-                        nudgeBox.innerHTML = `<strong>Tip:</strong> ${rec.reason}`;
-
-                        const addBtn = productInfo.querySelector('.add-btn');
-                        productInfo.insertBefore(nudgeBox, addBtn);
-                    }
-                });
-            }
-        } catch (e) {
-            console.error("Failed to parse recommendations", e);
-        }
-    }
 
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
