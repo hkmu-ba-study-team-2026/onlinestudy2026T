@@ -146,7 +146,7 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         label.question-title {
@@ -167,10 +167,14 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 8px;
+            align-items: start;
         }
 
         .scale-card {
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .scale-card input[type="radio"] {
@@ -182,16 +186,16 @@
 
         .scale-card label {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 8px 4px;
+            width: 100%;
+            height: 42px;
             background-color: #fafafa;
             border: 1.5px solid var(--border-color);
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
+            font-size: 0.95rem;
+            font-weight: 700;
             color: var(--text-primary);
             transition: all 0.2s ease;
         }
@@ -205,8 +209,19 @@
             border-color: var(--accent-color);
             background-color: #f1f5f9;
             color: var(--accent-color);
-            font-weight: 700;
             box-shadow: 0 0 0 1px var(--accent-color);
+        }
+
+        /* 置中提示文字 */
+        .scale-hint {
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-top: 6px;
+            text-align: center;
+            line-height: 1.2;
+            width: 100%;
+            display: block;
         }
 
         .submit-btn {
@@ -245,8 +260,12 @@
                 gap: 4px;
             }
             .scale-card label {
-                padding: 6px 2px;
-                font-size: 0.75rem;
+                height: 36px;
+                font-size: 0.85rem;
+            }
+            .scale-hint {
+                font-size: 0.58rem;
+                margin-top: 4px;
             }
             .scale-info ul {
                 grid-template-columns: repeat(2, 1fr);
@@ -259,14 +278,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 <script>
   const firebaseConfig = {
-  apiKey: "AIzaSyCI4ZkBR2_xZ94h99MbWvk34bs7i-XIrdQ",
-  authDomain: "online-study-2026-t.firebaseapp.com",
-  databaseURL: "https://online-study-2026-t-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "online-study-2026-t",
-  storageBucket: "online-study-2026-t.firebasestorage.app",
-  messagingSenderId: "938005822615",
-  appId: "1:938005822615:web:7405e67c9a62dc10c87dd2"
-};
+      apiKey: "AIzaSyCI4ZkBR2_xZ94h99MbWvk34bs7i-XIrdQ",
+      authDomain: "online-study-2026-t.firebaseapp.com",
+      databaseURL: "https://online-study-2026-t-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "online-study-2026-t",
+      storageBucket: "online-study-2026-t.firebasestorage.app",
+      messagingSenderId: "938005822615",
+      appId: "1:938005822615:web:7405e67c9a62dc10c87dd2"
+  };
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
@@ -296,7 +315,6 @@
                 </ul>
             </div>
 
-            <!-- 臨時隨機填寫按鈕 -->
             <button type="button" class="dev-autofill-btn" onclick="autoFillRandom()">⚡ Quick Autofill (Random) [To be removed in deployment]</button>
         </div>
 
@@ -396,10 +414,10 @@
                 <div class="scale-grid" id="q17_local_product"></div>
             </div>
 
-    <button type="submit" id="submitBtn" class="submit-btn">
-        Submit and Proceed to Store
-    </button>
-</form>
+            <button type="submit" id="submitBtn" class="submit-btn">
+                Submit and Proceed to Store
+            </button>
+        </form>
     </div>
 
     <script>
@@ -484,7 +502,7 @@
                 surveyResponses: surveyResponses,
             };
 
-            const fixedNoticeText = "Welcome to FreshMart! Please select the items you would like to purchase for your 3-day meal plan.";
+            const fixedNoticeText = "These featured items are eco-sustainable.";
             localStorage.setItem('ai_nudge_text', fixedNoticeText);
             localStorage.setItem('user_preferences', JSON.stringify(userPreferences));
 
@@ -496,8 +514,10 @@
             };
 
             try {
-                await db.ref('survey_responses').push(firebaseData);
-                console.log('Survey responses saved to Firebase successfully!');
+                if (typeof db !== 'undefined') {
+                    await db.ref('survey_responses').push(firebaseData);
+                    console.log('Survey responses saved to Firebase successfully!');
+                }
             } catch (dbError) {
                 console.error('Failed to save to Firebase:', dbError);
             }

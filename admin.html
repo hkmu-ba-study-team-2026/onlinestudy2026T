@@ -18,7 +18,7 @@
           storageBucket: "online-study-2026-t.firebasestorage.app",
           messagingSenderId: "938005822615",
           appId: "1:938005822615:web:7405e67c9a62dc10c87dd2"
-        };
+      };
 
       firebase.initializeApp(firebaseConfig);
       const db = firebase.database();
@@ -366,7 +366,7 @@
                 <td>${order.checkoutTime || "--"}</td>
                 <td>${order.formattedDuration || "--"}</td>
                 <td>$${(order.orderTotal || 0).toFixed(2)}</td>
-                <td>${order.featuredProductCount || 0}</td> <!-- 顯示 Featured 數量 -->
+                <td>${order.featuredProductCount || 0}</td>
                 <td>${itemsStr || "--"}</td>
                 <td><small>${seqStr || "None"}</small></td>
             `;
@@ -478,7 +478,6 @@
             const abandons = abandonSnap.val() ? Object.values(abandonSnap.val()) : [];
             const visits = visitSnap.val() ? Object.values(visitSnap.val()) : [];
 
-            // 1. 收集所有出現過的 Participant ID
             const allPIDs = new Set([
                 ...orders.map(o => o.participantID),
                 ...surveys.map(s => s.participantID),
@@ -486,7 +485,6 @@
                 ...visits.map(v => v.participantID)
             ].filter(pid => pid && pid !== ""));
 
-            // 2. 自動收集問卷的所有問題 key (q01_sensory_experience, q02_fresh...)
             const allSurveyKeys = new Set();
             surveys.forEach(s => {
                 if (s.responses) {
@@ -497,7 +495,6 @@
 
             const masterDataMap = {};
 
-            // 3. 初始化主表格欄位結構
             allPIDs.forEach(pid => {
                 masterDataMap[pid] = {
                     "Participant ID": pid,
@@ -505,12 +502,10 @@
                     "AI Nudge Text": ""
                 };
 
-                // 合併問卷回答到 Master Summary 表格中
                 sortedSurveyKeys.forEach(qKey => {
                     masterDataMap[pid][`Survey_${qKey}`] = "";
                 });
 
-                // 合併網站瀏覽與結帳數據
                 Object.assign(masterDataMap[pid], {
                     "Enter Time": "",
                     "Leave Time": "",
@@ -524,14 +519,13 @@
                     "Abandon Cart Total ($)": 0
                 });
 
-                // 1~19 號商品的購買量與選擇順序
-                for (let i = 1; i <= 19; i++) {
+                // 支援 1 ~ 30 號商品
+                for (let i = 1; i <= 30; i++) {
                     masterDataMap[pid][`Item_${i}_Qty`] = 0;
                     masterDataMap[pid][`Seq_Item_${i}`] = "";
                 }
             });
 
-            // 4. 填入問卷資料
             surveys.forEach(s => {
                 const pid = s.participantID;
                 if (masterDataMap[pid]) {
@@ -545,7 +539,6 @@
                 }
             });
 
-            // 5. 填入瀏覽日誌
             visits.forEach(v => {
                 const pid = v.participantID;
                 if (masterDataMap[pid]) {
@@ -555,7 +548,6 @@
                 }
             });
 
-            // 6. 填入結帳訂單數據
             orders.forEach(o => {
                 const pid = o.participantID;
                 if (masterDataMap[pid]) {
@@ -567,7 +559,7 @@
 
                     if (Array.isArray(o.finalCartItems)) {
                         o.finalCartItems.forEach(item => {
-                            if (item.id && item.id >= 1 && item.id <= 19) {
+                            if (item.id && item.id >= 1 && item.id <= 30) {
                                 masterDataMap[pid][`Item_${item.id}_Qty`] += (item.quantity || 0);
                             }
                         });
@@ -585,7 +577,7 @@
                         Object.assign(itemFirstOrder, o.itemSequenceMap);
                     }
 
-                    for (let i = 1; i <= 19; i++) {
+                    for (let i = 1; i <= 30; i++) {
                         if (o.itemSequenceMap && o.itemSequenceMap[`Seq_Item_${i}`] !== undefined) {
                             masterDataMap[pid][`Seq_Item_${i}`] = o.itemSequenceMap[`Seq_Item_${i}`];
                         } else {
@@ -595,7 +587,6 @@
                 }
             });
 
-            // 7. 填入棄單數據
             abandons.forEach(a => {
                 const pid = a.participantID;
                 if (masterDataMap[pid]) {
@@ -604,15 +595,11 @@
                 }
             });
 
-            // 8. 建立 Excel 檔
             const wb = XLSX.utils.book_new();
-
-            // Sheet 1: Master Merged Summary (包含完整問卷 + 行為數據)
             const masterRows = Object.values(masterDataMap);
             const wsMaster = XLSX.utils.json_to_sheet(masterRows);
             XLSX.utils.book_append_sheet(wb, wsMaster, "Master Merged Summary");
 
-            // Sheet 2: Selection Sequence (商品選擇的詳細時間序列)
             const sequenceRows = [];
             orders.forEach(o => {
                 const pid = o.participantID;
@@ -632,7 +619,6 @@
             const wsSequence = XLSX.utils.json_to_sheet(sequenceRows);
             XLSX.utils.book_append_sheet(wb, wsSequence, "Selection Sequence");
 
-            // 9. 匯出 Excel 檔案
             const dateStr = new Date().toISOString().split('T')[0];
             XLSX.writeFile(wb, `FreshMart_Research_MasterData_${dateStr}.xlsx`);
 

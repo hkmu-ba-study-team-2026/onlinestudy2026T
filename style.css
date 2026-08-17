@@ -35,7 +35,7 @@ body {
     padding: 10px;
     border: none;
     border-radius: 4px 0 0 4px;
-    font-size:15px;
+    font-size: 15px;
 }
 .search-btn {
     background-color: #ff9900;
@@ -155,7 +155,7 @@ body {
 .product-info p {
     color: #b12704;
     font-weight: bold;
-    margin:4px 0;
+    margin: 4px 0;
 }
 .add-btn {
     background-color: #ffd814;
@@ -238,7 +238,6 @@ body {
     color: #555;
 }
 
-
 .link-normal {
     color: #222 !important;
     text-decoration: none !important;
@@ -246,7 +245,6 @@ body {
 .link-normal:hover {
     color: #008749;
 }
-/* 管理员隐藏链接 */
 .admin-link {
     font-size: 10px;
     color: #999;
@@ -256,47 +254,8 @@ body {
 .admin-link:hover {
     color: #ff9900;
 }
-/* 修改 scale-card label，讓內容垂直排列並保持彈性高度 */
-.scale-card label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 4px;
-    background-color: #fafafa;
-    border: 1.5px solid var(--border-color);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    transition: all 0.2s ease;
-    min-height: 54px; /* 設定最小高度，避免有文字與沒文字的卡片高度不一致 */
-    text-align: center;
-}
 
-/* 數字樣式 */
-.scale-num {
-    font-size: 0.95rem;
-    font-weight: 700;
-}
-
-/* 下方提示文字樣式 */
-.scale-hint {
-    font-size: 0.68rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    margin-top: 2px;
-    line-height: 1.1;
-}
-
-/* 當被选中時，提示文字也微調顏色 */
-.scale-card input[type="radio"]:checked + label .scale-hint {
-    color: var(--accent-color);
-    font-weight: 500;
-}
-
-/* 卡片容器：改為 Flex 垂直對齊，讓按鍵與提示分開 */
+/* 量表按鍵與提示獨立樣式 */
 .scale-card {
     position: relative;
     display: flex;
@@ -304,7 +263,6 @@ body {
     align-items: center;
 }
 
-/* 按鍵本體：恢復原有的簡潔樣式 */
 .scale-card label {
     display: flex;
     align-items: center;
