@@ -478,13 +478,13 @@
 
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Saving responses & Loading store...';
+            submitBtn.textContent = 'Saving responses...';
 
             const inputPid = document.getElementById('inputParticipantID').value.trim();
             if (!inputPid) {
                 alert("Please enter a valid Participant ID.");
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit and Proceed to Store';
+                submitBtn.textContent = 'Submit';
                 return;
             }
             const participantNum = inputPid;
