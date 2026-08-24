@@ -212,7 +212,7 @@
     <div style="background: #ffffff; padding: 30px; border-radius: 12px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
         <h3 style="color: #16a34a; margin-bottom: 12px; font-size: 20px;">Welcome to FreshMart</h3>
         <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin-bottom: 16px;">
-            Please simulate an online grocery shopping task to select ingredients required for preparing three days' worth of meals.
+            Please simulate an online grocery shopping task to select ingredients required for <strong>preparing three days' worth of meals for yourself (one person)</strong>.
         </p>
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px; margin-bottom: 24px;">
             Shopping Budget Limit: $50.00 USD
@@ -252,6 +252,7 @@
     </div>
 </section>
 
+
 <section id="products" class="products-section">
     <div class="container">
 
@@ -264,39 +265,19 @@
 
         <div class="rec-banner" id="featuredBanner">
             <div class="products-grid" id="productWrap">
-                <div class="product-card" data-id="1" data-type="featured">
+                <!-- 1. Tomato Cherry (ID: 11) -->
+                <div class="product-card" data-id="11" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
-                    <div class="product-image"><img src="assets/apple.png" alt="Apple"></div>
+                    <div class="product-image"><img src="assets/tomato.jpg" alt="Tomato"></div>
                     <div class="product-info">
-                        <h3>Red Apple</h3>
-                        <h3>1 Count</h3>
-                        <p>$1.47</p>
-                        <button class="add-btn" data-id="1">Add to Cart</button>
+                        <h3>Tomato Cherry</h3>
+                        <h3>10 Ounce</h3>
+                        <p>$2.97</p>
+                        <button class="add-btn" data-id="11" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="2" data-type="featured">
-                    <span class="eco-badge">Eco-friendly</span>
-                    <div class="product-image"><img src="assets/milk.png" alt="Milk"></div>
-                    <div class="product-info">
-                        <h3>Whole Milk</h3>
-                        <h3>64 Ounce</h3>
-                        <p>$4.99</p>
-                        <button class="add-btn" data-id="2">Add to Cart</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-id="3" data-type="featured">
-                    <span class="eco-badge">Eco-friendly</span>
-                    <div class="product-image"><img src="assets/bread.jpg" alt="Bread"></div>
-                    <div class="product-info">
-                        <h3>Sourdough Bread</h3>
-                        <h3>24 Ounce</h3>
-                        <p>$5.49</p>
-                        <button class="add-btn" data-id="3">Add to Cart</button>
-                    </div>
-                </div>
-
+                <!-- 2. Chicken Drumsticks (ID: 4) -->
                 <div class="product-card" data-id="4" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
                     <div class="product-image"><img src="assets/chicken-drum.jpg" alt="Chicken Drum"></div>
@@ -304,26 +285,47 @@
                         <h3>Chicken Drumsticks</h3>
                         <h3>1 Lb</h3>
                         <p>$1.77</p>
-                        <button class="add-btn" data-id="4">Add to Cart</button>
+                        <button class="add-btn" data-id="4" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
 
-                <div class="product-card" data-id="5" data-type="featured">
+                <!-- 3. Smoked Salmon (ID: 21) -->
+                <div class="product-card" data-id="21" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
-                    <div class="product-image"><img src="assets/avocado.jpg" alt="Avocado"></div>
+                    <div class="product-image"><img src="assets/salmon.jpg" alt="Salmon"></div>
                     <div class="product-info">
-                        <h3>Avocado</h3>
-                        <h3>1 Count</h3>
-                        <p>$2.59</p>
-                        <button class="add-btn" data-id="5">Add to Cart</button>
+                        <h3>Smoked Salmon</h3>
+                        <h3>10 Ounce</h3>
+                        <p>$8.98</p>
+                        <button class="add-btn" data-id="21" data-source="featured">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- 4. Strawberries (ID: 6) -->
+                <div class="product-card" data-id="6" data-type="featured">
+                    <span class="eco-badge">Eco-friendly</span>
+                    <div class="product-image"><img src="assets/strawberries.jpg" alt="Strawberries"></div>
+                    <div class="product-info">
+                        <h3>Strawberries</h3>
+                        <h3>1 Lb</h3>
+                        <p>$2.38</p>
+                        <button class="add-btn" data-id="6" data-source="featured">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- 5. Greek Yogurt (ID: 26) -->
+                <div class="product-card" data-id="26" data-type="featured">
+                    <span class="eco-badge">Eco-friendly</span>
+                    <div class="product-image"><img src="assets/greek-yogurt.jpg" alt="Greek Yogurt"></div>
+                    <div class="product-info">
+                        <h3>Greek Yogurt</h3>
+                        <h3>32 Ounce</h3>
+                        <p>$4.99</p>
+                        <button class="add-btn" data-id="26" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
             </div>
-
-            <!-- 固定提示標語展示區 -->
-            <div id="bannerTextContainer" class="rec-banner-content">
-                <h2 class="nudge-text-highlight">These featured items are eco-sustainable.</h2>
-            </div>
+            <div id="bannerTextContainer" class="rec-banner-content"></div>
         </div>
     </div>
 </section>
@@ -426,7 +428,7 @@
                 </div>
             </div>
             <div class="product-card" data-id="15" data-type="vegetables">
-                <div class="product-image"><img src="assets/baby-carrots.jpg" alt="Baby Carrot"></div>
+                <div class="product-image"><img src="assets/baby-carrots.png" alt="Baby Carrot"></div>
                 <div class="product-info">
                     <h3>Peeled Baby Carrots</h3>
                     <h3>16 Oz</h3>
@@ -447,7 +449,7 @@
             <div class="product-card" data-id="16" data-type="meat">
                 <div class="product-image"><img src="assets/ground-beef.jpg" alt="Beef"></div>
                 <div class="product-info">
-                    <h3>Grounded Beef</h3>
+                    <h3>Ground Beef</h3>
                     <h3>1 Lb</h3>
                     <p>$6.99</p>
                     <button class="add-btn" data-id="16">Add to Cart</button>
@@ -648,6 +650,19 @@
     </div>
 </div>
 
+<!-- 超出預算警示 Modal -->
+<div id="budgetExceededModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+        <h3 class="modal-title" style="color: #dc2626;">⚠️ Budget Limit Exceeded</h3>
+        <p id="budgetExceededMessage" class="modal-message"></p>
+        <div class="modal-actions">
+            <button type="button" class="modal-btn confirm-btn" style="background-color: #dc2626;" onclick="closeBudgetModal()">
+                OK / Got it
+            </button>
+        </div>
+    </div>
+</div>
+
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script src="script.js"></script>
 <script>
@@ -693,7 +708,12 @@ document.addEventListener('DOMContentLoaded', function(){
                 if (currentTotal + product.price > MAX_BUDGET) {
                     e.stopImmediatePropagation();
                     e.preventDefault();
-                    alert(`Cannot add "${product.name}" ($${product.price.toFixed(2)})!\nYour remaining budget is $${(MAX_BUDGET - currentTotal).toFixed(2)}, which exceeds the $50.00 budget limit.`);
+                    showBudgetModal(
+                        product.name,
+                        product.price,
+                        MAX_BUDGET - currentTotal,
+                        MAX_BUDGET
+                    );
                     return false;
                 }
             }
@@ -760,6 +780,25 @@ document.addEventListener('DOMContentLoaded', function(){
         searchBtn.addEventListener('click', performSearch);
     }
 });
+
+function showBudgetModal(productName, productPrice, remainingBudget, maxBudget) {
+    const modal = document.getElementById('budgetExceededModal');
+    const msg = document.getElementById('budgetExceededMessage');
+    if (modal && msg) {
+        msg.innerHTML = `
+            Cannot add <strong>"${productName}"</strong> ($${productPrice.toFixed(2)})!<br><br>
+            Your remaining budget is <strong>$${remainingBudget.toFixed(2)}</strong>, adding this item exceeds the limit.
+        `;
+        modal.style.display = 'flex';
+    }
+}
+
+function closeBudgetModal() {
+    const modal = document.getElementById('budgetExceededModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
 </script>
 </body>
 </html>
