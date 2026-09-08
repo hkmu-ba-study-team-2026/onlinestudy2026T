@@ -4,18 +4,18 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-  const firebaseConfig = {
-      apiKey: "AIzaSyCI4ZkBR2_xZ94h99MbWvk34bs7i-XIrdQ",
-      authDomain: "online-study-2026-t.firebaseapp.com",
-      databaseURL: "https://online-study-2026-t-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "online-study-2026-t",
-      storageBucket: "online-study-2026-t.firebasestorage.app",
-      messagingSenderId: "938005822615",
-      appId: "1:938005822615:web:7405e67c9a62dc10c87dd2"
-  };
+    const firebaseConfig = {
+        apiKey: "AIzaSyCI4ZkBR2_xZ94h99MbWvk34bs7i-XIrdQ",
+        authDomain: "online-study-2026-t.firebaseapp.com",
+        databaseURL: "https://online-study-2026-t-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "online-study-2026-t",
+        storageBucket: "online-study-2026-t.firebasestorage.app",
+        messagingSenderId: "938005822615",
+        appId: "1:938005822615:web:7405e67c9a62dc10c87dd2"
+    };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 </script>
 <head>
     <meta charset="UTF-8">
@@ -98,6 +98,39 @@
             margin-bottom: 20px;
         }
 
+        /* 鎖定滾動時套用的樣式 */
+        body.scroll-locked {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+
+        /* 5 秒閱讀 Featured 浮動提示條 */
+        .featured-lock-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* 鎖定時導覽列不可點擊 */
+        .sub-menu.locked a {
+            pointer-events: none;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .rec-banner {
             background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
             border: 2px solid #22c55e;
@@ -111,7 +144,6 @@
             box-shadow: 0 4px 15px rgba(22, 163, 74, 0.2);
         }
 
-        /* 強化版顯眼提示框 */
         .rec-banner-content {
             background: #ffffff;
             border-radius: 12px;
@@ -136,21 +168,6 @@
             }
         }
 
-        .nudge-badge-pill {
-            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-            color: #ffffff;
-            font-size: 0.85rem;
-            font-weight: 800;
-            padding: 6px 12px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            box-shadow: 0 2px 6px rgba(21, 128, 61, 0.3);
-        }
-
         .nudge-text-highlight {
             color: #064e3b;
             font-size: 1.12rem;
@@ -160,7 +177,110 @@
             letter-spacing: 0.2px;
         }
 
-        /* Eco-friendly 綠色小框 */
+        /* More Info 按鈕樣式 */
+        .btn-more-info {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #2563eb;
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .btn-more-info:hover {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+            border-color: #93c5fd;
+        }
+
+        /* 彈出對話框遮罩 */
+        .info-modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(2px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 彈出對話框卡片主體 */
+        .info-modal-box {
+            background-color: #ffffff;
+            max-width: 360px;
+            width: 90%;
+            padding: 22px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            text-align: left;
+            animation: modalPop 0.2s ease-out;
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .info-modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+            padding: 2px 6px;
+        }
+
+        .info-modal-close:hover {
+            color: #475569;
+        }
+
+        .info-modal-text {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .info-modal-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 0;
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .info-modal-btn:hover {
+            background-color: #1d4ed8;
+        }
+
         .eco-badge {
             position: absolute;
             top: 8px;
@@ -194,13 +314,6 @@
             border-radius: 30px;
             display: inline-flex;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
-            letter-spacing: 0.5px;
-        }
-        .budget-badge.low-budget {
-            color: #991b1b;
-            background-color: #fef2f2;
-            border-color: #fca5a5;
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
             animation: pulse 2s infinite;
         }
@@ -210,15 +323,40 @@
 
 <div id="welcomeModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999;">
     <div style="background: #ffffff; padding: 30px; border-radius: 12px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-        <h3 style="color: #16a34a; margin-bottom: 12px; font-size: 20px;">Welcome to FreshMart</h3>
-        <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin-bottom: 16px;">
-            Please simulate an online grocery shopping task to select ingredients required for <strong>preparing three days' worth of meals for yourself (one person)</strong>.
+        <h2 style="color: #16a34a; margin-bottom: 12px; font-size: 20px;">Welcome to Section 2</h2>
+        <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin-bottom: 16px; text-align: left;">
+            In this section, we would like you to take part in a simulated online grocery shopping task on FreshMart. Please select groceries for your personal consumption over three days.
+        </p>
+        <p style="color: #4b5563; font-size: 14px; line-height: 1.6; margin-bottom: 16px; text-align: left;">
+            Your budget is USD 50, and you may spend any amount up to this limit. There are no right or wrong choices. We are simply interested in observing your shopping decisions. Please hit ‘check out’ after you finish shopping.
         </p>
         <div style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px; margin-bottom: 24px;">
             Shopping Budget Limit: $50.00 USD
         </div>
-        <button id="closeModalBtn" style="background: #16a34a; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px;">
-            I Understand & Continue
+        <button id="closeModalBtn" disabled style="background: #94a3b8; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-weight: bold; cursor: not-allowed; font-size: 15px; transition: all 0.3s ease;">
+            Please read carefully (5s)
+        </button>
+    </div>
+</div>
+
+<!-- 第二個彈窗：特顯 Nudge Text -->
+<div id="nudgeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 9999;">
+    <div style="background: #ffffff; padding: 32px 28px; border-radius: 14px; max-width: 520px; width: 90%; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.25); border: 2px solid #22c55e;">
+        <span style="display: inline-block; background: #dcfce7; color: #15803d; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">
+            🌱 Recommendation
+        </span>
+        <h2 style="color: #0f172a; margin-bottom: 16px; font-size: 20px; font-weight: 800;">A Special Note for Your Shopping</h2>
+
+        <!-- Nudge 文字高亮展示區塊 -->
+        <div style="background: #f0fdf4; border: 2px solid #86efac; border-left: 6px solid #16a34a; border-radius: 10px; padding: 18px 20px; margin-bottom: 24px; text-align: left;">
+            <p id="popupNudgeText" style="color: #064e3b; font-size: 16px; font-weight: 700; line-height: 1.55; margin: 0;">
+                Loading ...
+            </p>
+        </div>
+
+        <!-- 5 秒倒數按鈕 -->
+        <button id="closeNudgeModalBtn" disabled style="background: #94a3b8; color: white; border: none; padding: 12px 28px; border-radius: 8px; font-weight: bold; cursor: not-allowed; font-size: 15px; width: 100%; transition: all 0.3s ease;">
+            Please read carefully (5s)
         </button>
     </div>
 </div>
@@ -247,12 +385,13 @@
             <a href="#vegetables" class="link-normal">Vegetables</a>
             <a href="#meat" class="link-normal">Meat</a>
             <a href="#seafood" class="link-normal">Seafood</a>
-            <a href="#pantry-dairy" class="link-normal">Pantry & Dairy</a>
+            <a href="#dairy" class="link-normal">Pantry & Dairy</a>
+            <a href="#bakery" class="link-normal">Bakery</a>
         </nav>
     </div>
 </section>
 
-
+<!-- 1. 精選置頂區 (ID: 1 ~ 5) -->
 <section id="products" class="products-section">
     <div class="container">
 
@@ -265,63 +404,68 @@
 
         <div class="rec-banner" id="featuredBanner">
             <div class="products-grid" id="productWrap">
-                <!-- 1. Tomato Cherry (ID: 11) -->
-                <div class="product-card" data-id="11" data-type="featured">
+                <!-- 1. Tomato Cherry (ID: 1) -->
+                <div class="product-card" data-id="1" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
                     <div class="product-image"><img src="assets/tomato.jpg" alt="Tomato"></div>
                     <div class="product-info">
-                        <h3>Tomato Cherry</h3>
+                        <h3>Cherry Tomato</h3>
                         <h3>10 Ounce</h3>
                         <p>$2.97</p>
-                        <button class="add-btn" data-id="11" data-source="featured">Add to Cart</button>
+                        <button type="button" class="btn-more-info" onclick="openInfoModal('Cherry Tomato')">More info</button>
+                        <button class="add-btn" data-id="1" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- 2. Chicken Drumsticks (ID: 4) -->
-                <div class="product-card" data-id="4" data-type="featured">
+                <!-- 2. Chicken Drumsticks (ID: 2) -->
+                <div class="product-card" data-id="2" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
                     <div class="product-image"><img src="assets/chicken-drum.jpg" alt="Chicken Drum"></div>
                     <div class="product-info">
                         <h3>Chicken Drumsticks</h3>
                         <h3>1 Lb</h3>
                         <p>$1.77</p>
-                        <button class="add-btn" data-id="4" data-source="featured">Add to Cart</button>
+                        <button type="button" class="btn-more-info" onclick="openInfoModal('Chicken Drumsticks')">More info</button>
+                        <button class="add-btn" data-id="2" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- 3. Smoked Salmon (ID: 21) -->
-                <div class="product-card" data-id="21" data-type="featured">
+                <!-- 3. Large Brown Eggs (ID: 3) -->
+                <div class="product-card" data-id="3" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
-                    <div class="product-image"><img src="assets/salmon.jpg" alt="Salmon"></div>
+                    <div class="product-image"><img src="assets/eggs.jpg" alt="Eggs"></div>
                     <div class="product-info">
-                        <h3>Smoked Salmon</h3>
-                        <h3>10 Ounce</h3>
-                        <p>$8.98</p>
-                        <button class="add-btn" data-id="21" data-source="featured">Add to Cart</button>
+                        <h3>Large Brown Eggs</h3>
+                        <h3>12 Count</h3>
+                        <p>$7.49</p>
+                        <button type="button" class="btn-more-info" onclick="openInfoModal('Large Brown Eggs')">More info</button>
+                        <button class="add-btn" data-id="3" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- 4. Strawberries (ID: 6) -->
-                <div class="product-card" data-id="6" data-type="featured">
+                <!-- 4. Strawberries (ID: 4) -->
+                <div class="product-card" data-id="4" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
                     <div class="product-image"><img src="assets/strawberries.jpg" alt="Strawberries"></div>
                     <div class="product-info">
                         <h3>Strawberries</h3>
                         <h3>1 Lb</h3>
                         <p>$2.38</p>
-                        <button class="add-btn" data-id="6" data-source="featured">Add to Cart</button>
+                        <button type="button" class="btn-more-info" onclick="openInfoModal('Strawberries')">More info</button>
+                        <button class="add-btn" data-id="4" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
 
-                <!-- 5. Greek Yogurt (ID: 26) -->
-                <div class="product-card" data-id="26" data-type="featured">
+                <!-- 5. Greek Yogurt (ID: 5) -->
+                <div class="product-card" data-id="5" data-type="featured">
                     <span class="eco-badge">Eco-friendly</span>
                     <div class="product-image"><img src="assets/greek-yogurt.jpg" alt="Greek Yogurt"></div>
                     <div class="product-info">
                         <h3>Greek Yogurt</h3>
                         <h3>32 Ounce</h3>
                         <p>$4.99</p>
-                        <button class="add-btn" data-id="26" data-source="featured">Add to Cart</button>
+                        <button type="button" class="btn-more-info" onclick="openInfoModal('Greek Yogurt')">More info</button>
+                        <button class="add-btn" data-id="5" data-source="featured">Add to Cart</button>
                     </div>
                 </div>
             </div>
@@ -330,6 +474,7 @@
     </div>
 </section>
 
+<!-- 2. Fruits (包含複製的 Strawberries ID: 4) -->
 <section id="fruits" class="products-section">
     <div class="container">
         <div class="cate-head">
@@ -337,12 +482,21 @@
         </div>
         <div class="products-grid">
             <div class="product-card" data-id="6" data-type="fruits">
+                <div class="product-image"><img src="assets/apple.png" alt="Apple"></div>
+                <div class="product-info">
+                    <h3>Red Apple</h3>
+                    <h3>1 Count</h3>
+                    <p>$1.47</p>
+                    <button class="add-btn" data-id="6" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="4" data-type="fruits">
                 <div class="product-image"><img src="assets/strawberries.jpg" alt="Strawberries"></div>
                 <div class="product-info">
                     <h3>Strawberries</h3>
                     <h3>1 Lb</h3>
                     <p>$2.38</p>
-                    <button class="add-btn" data-id="6">Add to Cart</button>
+                    <button class="add-btn" data-id="4" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="7" data-type="fruits">
@@ -351,7 +505,7 @@
                     <h3>Blueberries</h3>
                     <h3>1 Pint</h3>
                     <p>$2.99</p>
-                    <button class="add-btn" data-id="7">Add to Cart</button>
+                    <button class="add-btn" data-id="7" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="8" data-type="fruits">
@@ -360,7 +514,7 @@
                     <h3>Banana Bunch</h3>
                     <h3>4-5 count</h3>
                     <p>$0.99</p>
-                    <button class="add-btn" data-id="8">Add to Cart</button>
+                    <button class="add-btn" data-id="8" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="9" data-type="fruits">
@@ -369,7 +523,7 @@
                     <h3>Oranges</h3>
                     <h3>3 Lb</h3>
                     <p>$4.99</p>
-                    <button class="add-btn" data-id="9">Add to Cart</button>
+                    <button class="add-btn" data-id="9" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="10" data-type="fruits">
@@ -378,26 +532,36 @@
                     <h3>Lemon</h3>
                     <h3>1 Each</h3>
                     <p>$0.74</p>
-                    <button class="add-btn" data-id="10">Add to Cart</button>
+                    <button class="add-btn" data-id="10" data-source="category">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+<!-- 3. Vegetables (包含複製的 Tomato Cherry ID: 1) -->
 <section id="vegetables" class="products-section">
     <div class="container">
         <div class="cate-head">
             <h2>Fresh Vegetables</h2>
         </div>
         <div class="products-grid">
-            <div class="product-card" data-id="11" data-type="vegetables">
+            <div class="product-card" data-id="1" data-type="vegetables">
                 <div class="product-image"><img src="assets/tomato.jpg" alt="Tomato"></div>
                 <div class="product-info">
-                    <h3>Tomato Cherry</h3>
+                    <h3>Cherry Tomato</h3>
                     <h3>10 Ounce</h3>
                     <p>$2.97</p>
-                    <button class="add-btn" data-id="11">Add to Cart</button>
+                    <button class="add-btn" data-id="1" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="11" data-type="vegetables">
+                <div class="product-image"><img src="assets/avocado.jpg" alt="Avocado"></div>
+                <div class="product-info">
+                    <h3>Avocado</h3>
+                    <h3>1 Count</h3>
+                    <p>$2.59</p>
+                    <button class="add-btn" data-id="11" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="12" data-type="vegetables">
@@ -406,7 +570,7 @@
                     <h3>Sweet Potato</h3>
                     <h3>1 Each</h3>
                     <p>$1.95</p>
-                    <button class="add-btn" data-id="12">Add to Cart</button>
+                    <button class="add-btn" data-id="12" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="13" data-type="vegetables">
@@ -415,7 +579,7 @@
                     <h3>Cucumber</h3>
                     <h3>16 Oz</h3>
                     <p>$2.08</p>
-                    <button class="add-btn" data-id="13">Add to Cart</button>
+                    <button class="add-btn" data-id="13" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="14" data-type="vegetables">
@@ -424,7 +588,7 @@
                     <h3>Bi-Color Corn</h3>
                     <h3>1 Each</h3>
                     <p>$0.50</p>
-                    <button class="add-btn" data-id="14">Add to Cart</button>
+                    <button class="add-btn" data-id="14" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="15" data-type="vegetables">
@@ -433,26 +597,36 @@
                     <h3>Peeled Baby Carrots</h3>
                     <h3>16 Oz</h3>
                     <p>$1.32</p>
-                    <button class="add-btn" data-id="15">Add to Cart</button>
+                    <button class="add-btn" data-id="15" data-source="category">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+<!-- 4. Meat (包含複製的 Chicken Drumsticks ID: 2) -->
 <section id="meat" class="products-section">
     <div class="container">
         <div class="cate-head">
             <h2>Fresh Meat</h2>
         </div>
         <div class="products-grid">
+            <div class="product-card" data-id="2" data-type="meat">
+                <div class="product-image"><img src="assets/chicken-drum.jpg" alt="Chicken Drum"></div>
+                <div class="product-info">
+                    <h3>Chicken Drumsticks</h3>
+                    <h3>1 Lb</h3>
+                    <p>$1.77</p>
+                    <button class="add-btn" data-id="2" data-source="category">Add to Cart</button>
+                </div>
+            </div>
             <div class="product-card" data-id="16" data-type="meat">
                 <div class="product-image"><img src="assets/ground-beef.jpg" alt="Beef"></div>
                 <div class="product-info">
                     <h3>Ground Beef</h3>
                     <h3>1 Lb</h3>
                     <p>$6.99</p>
-                    <button class="add-btn" data-id="16">Add to Cart</button>
+                    <button class="add-btn" data-id="16" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="17" data-type="meat">
@@ -461,7 +635,7 @@
                     <h3>Chicken Breasts Fillets</h3>
                     <h3>1 Lb</h3>
                     <p>$2.79</p>
-                    <button class="add-btn" data-id="17">Add to Cart</button>
+                    <button class="add-btn" data-id="17" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="18" data-type="meat">
@@ -470,7 +644,7 @@
                     <h3>Beef Sirloin Steaks</h3>
                     <h3>1 Lb</h3>
                     <p>$15.24</p>
-                    <button class="add-btn" data-id="18">Add to Cart</button>
+                    <button class="add-btn" data-id="18" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="19" data-type="meat">
@@ -479,7 +653,7 @@
                     <h3>Pork Loin Chops</h3>
                     <h3>1 Lb</h3>
                     <p>$7.38</p>
-                    <button class="add-btn" data-id="19">Add to Cart</button>
+                    <button class="add-btn" data-id="19" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="20" data-type="meat">
@@ -488,13 +662,14 @@
                     <h3>Ground Turkey Meat</h3>
                     <h3>1 Lb</h3>
                     <p>$5.46</p>
-                    <button class="add-btn" data-id="20">Add to Cart</button>
+                    <button class="add-btn" data-id="20" data-source="category">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+<!-- 5. Seafood Market (Smoked Salmon ID: 21) -->
 <section id="seafood" class="products-section">
     <div class="container">
         <div class="cate-head">
@@ -507,7 +682,7 @@
                     <h3>Smoked Salmon</h3>
                     <h3>10 Ounce</h3>
                     <p>$8.98</p>
-                    <button class="add-btn" data-id="21">Add to Cart</button>
+                    <button class="add-btn" data-id="21" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="22" data-type="seafood">
@@ -516,7 +691,7 @@
                     <h3>Raw Shrimp Pack</h3>
                     <h3>12 Ounce</h3>
                     <p>$7.64</p>
-                    <button class="add-btn" data-id="22">Add to Cart</button>
+                    <button class="add-btn" data-id="22" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="23" data-type="seafood">
@@ -525,7 +700,7 @@
                     <h3>Cod Fillets</h3>
                     <h3>16 Ounce</h3>
                     <p>$13.78</p>
-                    <button class="add-btn" data-id="23">Add to Cart</button>
+                    <button class="add-btn" data-id="23" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="24" data-type="seafood">
@@ -534,7 +709,7 @@
                     <h3>Breaded Fish Fillets</h3>
                     <h3>19 Ounce</h3>
                     <p>$7.99</p>
-                    <button class="add-btn" data-id="24">Add to Cart</button>
+                    <button class="add-btn" data-id="24" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="25" data-type="seafood">
@@ -543,44 +718,63 @@
                     <h3>Tilapia Fillets</h3>
                     <h3>12 Ounce</h3>
                     <p>$5.99</p>
-                    <button class="add-btn" data-id="25">Add to Cart</button>
+                    <button class="add-btn" data-id="25" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="26" data-type="seafood">
+                <div class="product-image"><img src="assets/tuna.jpg" alt="Tuna"></div>
+                <div class="product-info">
+                    <h3>Tuna Pack</h3>
+                    <h3>2.6 Ounce</h3>
+                    <p>$1.25</p>
+                    <button class="add-btn" data-id="26" data-source="category">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="pantry-dairy" class="products-section">
+<!-- 6. Pantry & Dairy (包含複製的 Eggs ID: 3 與 Greek Yogurt ID: 5) -->
+<section id="dairy" class="products-section">
     <div class="container">
         <div class="cate-head">
             <h2>Dairy, Cheese & Eggs</h2>
         </div>
         <div class="products-grid">
-            <div class="product-card" data-id="26" data-type="dairy">
+            <div class="product-card" data-id="5" data-type="dairy">
                 <div class="product-image"><img src="assets/greek-yogurt.jpg" alt="Greek-Yogurt"></div>
                 <div class="product-info">
                     <h3>Greek Yogurt</h3>
                     <h3>32 Ounce</h3>
                     <p>$4.99</p>
-                    <button class="add-btn" data-id="26">Add to Cart</button>
+                    <button class="add-btn" data-id="5" data-source="category">Add to Cart</button>
                 </div>
             </div>
-            <div class="product-card" data-id="27" data-type="dairy">
-                <div class="product-image"><img src="assets/cheddar-cheese.jpg" alt="Cheddar Cheese"></div>
-                <div class="product-info">
-                    <h3>Cheddar Cheese</h3>
-                    <h3>8 Ounce, 10 Slices</h3>
-                    <p>$1.65</p>
-                    <button class="add-btn" data-id="27">Add to Cart</button>
-                </div>
-            </div>
-            <div class="product-card" data-id="28" data-type="dairy">
+            <div class="product-card" data-id="3" data-type="dairy">
                 <div class="product-image"><img src="assets/eggs.jpg" alt="Eggs"></div>
                 <div class="product-info">
                     <h3>Large Brown Eggs</h3>
                     <h3>12 Count</h3>
                     <p>$7.49</p>
-                    <button class="add-btn" data-id="28">Add to Cart</button>
+                    <button class="add-btn" data-id="3" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="27" data-type="dairy">
+                <div class="product-image"><img src="assets/milk.png" alt="Milk"></div>
+                <div class="product-info">
+                    <h3>Whole Milk</h3>
+                    <h3>64 Ounce</h3>
+                    <p>$4.99</p>
+                    <button class="add-btn" data-id="27" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="28" data-type="dairy">
+                <div class="product-image"><img src="assets/cheddar-cheese.jpg" alt="Cheddar Cheese"></div>
+                <div class="product-info">
+                    <h3>Cheddar Cheese</h3>
+                    <h3>8 Ounce, 10 Slices</h3>
+                    <p>$1.65</p>
+                    <button class="add-btn" data-id="28" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="29" data-type="dairy">
@@ -589,7 +783,7 @@
                     <h3>Unsalted Butter</h3>
                     <h3>16 Ounce</h3>
                     <p>$2.99</p>
-                    <button class="add-btn" data-id="29">Add to Cart</button>
+                    <button class="add-btn" data-id="29" data-source="category">Add to Cart</button>
                 </div>
             </div>
             <div class="product-card" data-id="30" data-type="dairy">
@@ -598,7 +792,71 @@
                     <h3>Four Cheese Blend</h3>
                     <h3>8 Ounce</h3>
                     <p>$1.90</p>
-                    <button class="add-btn" data-id="30">Add to Cart</button>
+                    <button class="add-btn" data-id="30" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="bakery" class="products-section">
+    <div class="container">
+        <div class="cate-head">
+            <h2>Bakery</h2>
+        </div>
+        <div class="products-grid">
+            <div class="product-card" data-id="31" data-type="dairy">
+                <div class="product-image"><img src="assets/sourdough.jpg" alt="Sourdough"></div>
+                <div class="product-info">
+                    <h3>Sourdough Bread</h3>
+                    <h3>24 Ounce</h3>
+                    <p>$5.49</p>
+                    <button class="add-btn" data-id="31" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="32" data-type="bakery">
+                <div class="product-image"><img src="assets/butter-bread.jpg" alt="Butter Bread"></div>
+                <div class="product-info">
+                    <h3>Butter Bread</h3>
+                    <h3>20 Ounce</h3>
+                    <p>$3.42</p>
+                    <button class="add-btn" data-id="32" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="33" data-type="bakery">
+                <div class="product-image"><img src="assets/whole-wheat-bread.jpg" alt="Whole Wheat Bread"></div>
+                <div class="product-info">
+                    <h3>Whole Wheat Bread</h3>
+                    <h3>24 Ounce</h3>
+                    <p>$3.99</p>
+                    <button class="add-btn" data-id="33" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="34" data-type="bakery">
+                <div class="product-image"><img src="assets/honey-wheat-bread.jpg" alt="Honey Wheat Bread"></div>
+                <div class="product-info">
+                    <h3>Honey Wheat Bread</h3>
+                    <h3>20 Ounce</h3>
+                    <p>$2.49</p>
+                    <button class="add-btn" data-id="34" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="35" data-type="bakery">
+                <div class="product-image"><img src="assets/white-bread.jpg" alt="White Bread"></div>
+                <div class="product-info">
+                    <h3>White Bread</h3>
+                    <h3>20 Ounce</h3>
+                    <p>$2.49</p>
+                    <button class="add-btn" data-id="35" data-source="category">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-id="36" data-type="bakery">
+                <div class="product-image"><img src="assets/grain-seed-bread.jpg" alt="Grain and Seed Bread"></div>
+                <div class="product-info">
+                    <h3>Grain & Seed Bread</h3>
+                    <h3>16 Ounce</h3>
+                    <p>$4.97</p>
+                    <button class="add-btn" data-id="36" data-source="category">Add to Cart</button>
                 </div>
             </div>
         </div>
@@ -640,7 +898,7 @@
     <div class="modal-card">
         <h3 class="modal-title">Notice</h3>
         <p class="modal-message">
-            Thank you for completing the survey and checkout process! You will now be redirected to the next page.
+            Checked-out! You will now be redirected to the next survey page.
         </p>
         <div class="modal-actions">
             <button type="button" class="modal-btn confirm-btn" onclick="handleCheckoutModalConfirm()">
@@ -650,7 +908,6 @@
     </div>
 </div>
 
-<!-- 超出預算警示 Modal -->
 <div id="budgetExceededModal" class="modal-overlay" style="display: none;">
     <div class="modal-card">
         <h3 class="modal-title" style="color: #dc2626;">⚠️ Budget Limit Exceeded</h3>
@@ -663,142 +920,232 @@
     </div>
 </div>
 
+<div id="productInfoModal" class="info-modal-backdrop" onclick="closeInfoModal(event)">
+    <div class="info-modal-box" onclick="event.stopPropagation()">
+        <div class="info-modal-title">
+            <span id="modalProductTitle">Product Info</span>
+            <button class="info-modal-close" onclick="closeInfoModal()">&times;</button>
+        </div>
+        <p id="modalProductText" class="info-modal-text">
+            <!-- 預留讓你自訂的那句話 -->
+            This is where your custom sentence will be placed.
+        </p>
+        <button class="info-modal-btn" onclick="closeInfoModal()">Got it</button>
+    </div>
+</div>
+
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 <script src="script.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-    const MAX_BUDGET = 50.00;
+    const featuredInfoDescriptions = {
+        "Cherry Tomato": "You may consider these vine-ripened, hand-picked cherry tomatoes. Their Fair Trade and EFI certifications support fair wages and safe working conditions.",
+        "Chicken Drumsticks": "You may consider these chicken drumsticks from chickens raised with outdoor access and without antibiotics or added hormones. The packaging is also made from 100% recyclable plastic.",
+        "Large Brown Eggs": "You may consider these responsibly produced eggs. The hens have year-round outdoor access, and the product supports farmers while allowing you to trace the eggs back to the farm.",
+        "Strawberries": "You may consider these certified sustainable strawberries, made with at least 95% organic ingredients.",
+        "Greek Yogurt": "You may consider this slowly crafted Greek yogurt, made with organic ingredients and USDA-certified organic whole milk."
+    };
 
-    function updateRemainingBudgetDisplay() {
-        let currentTotal = 0;
-        if (typeof cart !== 'undefined' && Array.isArray(cart)) {
-            cart.forEach(item => {
-                currentTotal += (item.price * item.quantity);
+    function openInfoModal(productName) {
+        const modal = document.getElementById("productInfoModal");
+        const titleEl = document.getElementById("modalProductTitle");
+        const textEl = document.getElementById("modalProductText");
+
+        titleEl.textContent = productName;
+        // 若字典有定義則使用自訂句子，否則使用預設句子
+        textEl.textContent = featuredInfoDescriptions[productName] || "Special curated item for your shopping list.";
+
+        modal.style.display = "flex";
+    }
+
+    function closeInfoModal(e) {
+        if (!e || e.target.id === "productInfoModal" || e.target.classList.contains("info-modal-close") || e.target.classList.contains("info-modal-btn")) {
+            document.getElementById("productInfoModal").style.display = "none";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        const MAX_BUDGET = 50.00;
+
+        // 1. 取得 DOM 元素
+        const welcomeModal = document.getElementById('welcomeModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const nudgeModal = document.getElementById('nudgeModal');
+        const closeNudgeModalBtn = document.getElementById('closeNudgeModalBtn');
+        const popupNudgeText = document.getElementById('popupNudgeText');
+        const bannerTextContainer = document.getElementById('bannerTextContainer');
+
+        // 2. 注入 Nudge 文案
+        const textSentence = localStorage.getItem('nudge_text') || 'These items are eco-friendly, freshly sourced, and sustainable for your daily meals.';
+        if (popupNudgeText) {
+            popupNudgeText.textContent = textSentence;
+        }
+        if (bannerTextContainer) {
+            bannerTextContainer.innerHTML = `<h2 class="nudge-text-highlight">${textSentence}</h2>`;
+        }
+
+        // 3. ★ 啟動第一個彈窗 5 秒強制倒數 ★
+        if (welcomeModal && closeModalBtn) {
+            let countdown1 = 5;
+            closeModalBtn.disabled = true;
+            closeModalBtn.textContent = `Please read carefully (${countdown1}s)`;
+
+            const timer1 = setInterval(() => {
+                countdown1--;
+                if (countdown1 > 0) {
+                    closeModalBtn.textContent = `Please read carefully (${countdown1}s)`;
+                } else {
+                    clearInterval(timer1);
+                    closeModalBtn.disabled = false;
+                    closeModalBtn.textContent = 'I Understand & Continue';
+                    closeModalBtn.style.backgroundColor = '#16a34a';
+                    closeModalBtn.style.cursor = 'pointer';
+                }
+            }, 1000);
+
+            // 覆蓋 script.js 的預設行為，強制等倒數完點擊才切換到第二個彈窗
+            closeModalBtn.onclick = function(e) {
+                e.stopPropagation();
+                if (!closeModalBtn.disabled) {
+                    welcomeModal.style.display = 'none';
+                    showNudgeModal();
+                }
+            };
+        }
+
+        // 4. ★ 第二個彈窗（Nudge）5 秒強制倒數 ★
+        function showNudgeModal() {
+            if (!nudgeModal || !closeNudgeModalBtn) return;
+            nudgeModal.style.display = 'flex';
+
+            let countdown2 = 5;
+            closeNudgeModalBtn.disabled = true;
+            closeNudgeModalBtn.textContent = `Please read carefully (${countdown2}s)`;
+
+            const timer2 = setInterval(() => {
+                countdown2--;
+                if (countdown2 > 0) {
+                    closeNudgeModalBtn.textContent = `Please read carefully (${countdown2}s)`;
+                } else {
+                    clearInterval(timer2);
+                    closeNudgeModalBtn.disabled = false;
+                    closeNudgeModalBtn.textContent = 'Start Shopping Now →';
+                    closeNudgeModalBtn.style.backgroundColor = '#16a34a';
+                    closeNudgeModalBtn.style.cursor = 'pointer';
+                }
+            }, 1000);
+
+            closeNudgeModalBtn.onclick = function(e) {
+                e.stopPropagation();
+                if (!closeNudgeModalBtn.disabled) {
+                    nudgeModal.style.display = 'none';
+                }
+            };
+        }
+
+        // 5. 購物車預算更新功能
+        function updateRemainingBudgetDisplay() {
+            let currentTotal = 0;
+            if (typeof cart !== 'undefined' && Array.isArray(cart)) {
+                cart.forEach(item => {
+                    currentTotal += (item.price * item.quantity);
+                });
+            }
+
+            const remaining = MAX_BUDGET - currentTotal;
+            const remainingEl = document.getElementById('remainingBudget');
+            const budgetDisplay = document.getElementById('budgetDisplay');
+
+            if (remainingEl) {
+                remainingEl.innerText = Math.max(0, remaining).toFixed(2);
+            }
+
+            if (budgetDisplay) {
+                if (remaining <= 20) {
+                    budgetDisplay.classList.add('low-budget');
+                } else {
+                    budgetDisplay.classList.remove('low-budget');
+                }
+            }
+        }
+
+        const originalUpdateCart = window.updateCart;
+        if (typeof originalUpdateCart === 'function') {
+            window.updateCart = function() {
+                originalUpdateCart();
+                updateRemainingBudgetDisplay();
+            };
+        }
+
+        updateRemainingBudgetDisplay();
+
+        // 6. 搜尋欄位邏輯
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const allCards = document.querySelectorAll('.product-card');
+
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+
+            allCards.forEach(card => {
+                const titleEl = card.querySelector('.product-info h3');
+                const titleText = titleEl ? titleEl.innerText.toLowerCase() : '';
+
+                if (titleText.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.querySelectorAll('.products-section').forEach(section => {
+                const grid = section.querySelector('.products-grid');
+                if (!grid) return;
+
+                const visibleCards = grid.querySelectorAll('.product-card[style*="display: flex"]');
+                let noResultMsg = grid.querySelector('.no-results-msg');
+
+                if (visibleCards.length === 0 && query !== '') {
+                    if (!noResultMsg) {
+                        noResultMsg = document.createElement('div');
+                        noResultMsg.className = 'no-results-msg';
+                        noResultMsg.innerText = 'No products found matching your search.';
+                        grid.appendChild(noResultMsg);
+                    }
+                } else if (noResultMsg) {
+                    noResultMsg.remove();
+                }
             });
         }
 
-        const remaining = MAX_BUDGET - currentTotal;
-        const remainingEl = document.getElementById('remainingBudget');
-        const budgetDisplay = document.getElementById('budgetDisplay');
-
-        if (remainingEl) {
-            remainingEl.innerText = Math.max(0, remaining).toFixed(2);
+        if (searchInput) {
+            searchInput.addEventListener('input', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') performSearch();
+            });
         }
-
-        if (budgetDisplay) {
-            if (remaining <= 20) {
-                budgetDisplay.classList.add('low-budget');
-            } else {
-                budgetDisplay.classList.remove('low-budget');
-            }
+        if (searchBtn) {
+            searchBtn.addEventListener('click', performSearch);
         }
-    }
-
-    document.querySelectorAll('.add-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            const productId = parseInt(this.getAttribute('data-id'));
-            const product = (typeof products !== 'undefined') ? products.find(p => p.id === productId) : null;
-
-            if (product) {
-                let currentTotal = 0;
-                if (typeof cart !== 'undefined' && Array.isArray(cart)) {
-                    cart.forEach(item => currentTotal += (item.price * item.quantity));
-                }
-
-                if (currentTotal + product.price > MAX_BUDGET) {
-                    e.stopImmediatePropagation();
-                    e.preventDefault();
-                    showBudgetModal(
-                        product.name,
-                        product.price,
-                        MAX_BUDGET - currentTotal,
-                        MAX_BUDGET
-                    );
-                    return false;
-                }
-            }
-
-            setTimeout(updateRemainingBudgetDisplay, 50);
-        }, true);
     });
 
-    const originalUpdateCart = window.updateCart;
-    if (typeof originalUpdateCart === 'function') {
-        window.updateCart = function() {
-            originalUpdateCart();
-            updateRemainingBudgetDisplay();
-        };
-    }
-
-    updateRemainingBudgetDisplay();
-
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const allCards = document.querySelectorAll('.product-card');
-
-    function performSearch() {
-        const query = searchInput.value.toLowerCase().trim();
-
-        allCards.forEach(card => {
-            const titleEl = card.querySelector('.product-info h3');
-            const titleText = titleEl ? titleEl.innerText.toLowerCase() : '';
-
-            if (titleText.includes(query)) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        document.querySelectorAll('.products-section').forEach(section => {
-            const grid = section.querySelector('.products-grid');
-            if (!grid) return;
-
-            const visibleCards = grid.querySelectorAll('.product-card[style*="display: flex"]');
-            let noResultMsg = grid.querySelector('.no-results-msg');
-
-            if (visibleCards.length === 0 && query !== '') {
-                if (!noResultMsg) {
-                    noResultMsg = document.createElement('div');
-                    noResultMsg.className = 'no-results-msg';
-                    noResultMsg.innerText = 'No products found matching your search.';
-                    grid.appendChild(noResultMsg);
-                }
-            } else if (noResultMsg) {
-                noResultMsg.remove();
-            }
-        });
-    }
-
-    if (searchInput) {
-        searchInput.addEventListener('input', performSearch);
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') performSearch();
-        });
-    }
-    if (searchBtn) {
-        searchBtn.addEventListener('click', performSearch);
-    }
-});
-
-function showBudgetModal(productName, productPrice, remainingBudget, maxBudget) {
-    const modal = document.getElementById('budgetExceededModal');
-    const msg = document.getElementById('budgetExceededMessage');
-    if (modal && msg) {
-        msg.innerHTML = `
+    function showBudgetModal(productName, productPrice, remainingBudget, maxBudget) {
+        const modal = document.getElementById('budgetExceededModal');
+        const msg = document.getElementById('budgetExceededMessage');
+        if (modal && msg) {
+            msg.innerHTML = `
             Cannot add <strong>"${productName}"</strong> ($${productPrice.toFixed(2)})!<br><br>
-            Your remaining budget is <strong>$${remainingBudget.toFixed(2)}</strong>, adding this item exceeds the limit.
+            Your remaining budget is <strong>$${Math.max(0, remainingBudget).toFixed(2)}</strong>, adding this item exceeds the $${maxBudget.toFixed(2)} limit.
         `;
-        modal.style.display = 'flex';
+            modal.style.display = 'flex';
+        }
     }
-}
 
-function closeBudgetModal() {
-    const modal = document.getElementById('budgetExceededModal');
-    if (modal) {
-        modal.style.display = 'none';
+    function closeBudgetModal() {
+        const modal = document.getElementById('budgetExceededModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
     }
-}
 </script>
 </body>
 </html>
